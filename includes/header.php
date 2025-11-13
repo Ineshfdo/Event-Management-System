@@ -25,7 +25,6 @@ if (session_status() === PHP_SESSION_NONE) {
 <div class="flex-shrink-0">
   <a href="../pages/index.php" class="flex items-center gap-3 text-gray-900 font-semibold transition-transform duration-200 hover:scale-105">
     <img class="h-12 w-auto" src="../Images/apiit.png" alt="APIIT Logo">
-    <span class="text-xl font-bold tracking-tight">Event Horizan</span>
   </a>
 </div>
 
@@ -104,11 +103,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <a href="../pages/reminders.php"
          class="block font-medium hover:text-blue-600 transition">Reminders</a>
 
-      <a href="../pages/contactus.php"
-         class="block font-medium hover:text-blue-600 transition">Contact Us</a>
-
-      <a href="../pages/aboutus.php"
-         class="block font-medium hover:text-blue-600 transition">About Us</a>
+      
 
       <?php if(isset($_SESSION['email'])): ?>
         <?php $firstLetter = strtoupper($_SESSION['email'][0]); ?>

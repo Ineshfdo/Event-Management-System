@@ -74,10 +74,10 @@ $clubs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <table class="w-full text-left border-collapse min-w-[600px]">
       <thead class="bg-gray-50">
         <tr>
-          <th class="p-3 border-b">ID</th>
+ 
           <th class="p-3 border-b">Club Name</th>
           <th class="p-3 border-b">Description</th>
-          <th class="p-3 border-b">Created At</th>
+ 
           <th class="p-3 border-b">Actions</th>
         </tr>
       </thead>
@@ -85,10 +85,10 @@ $clubs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php foreach($clubs as $club): ?>
           <tr class="border-b hover:bg-gray-50">
-            <td class="p-3"><?= $club['id'] ?></td>
+ 
             <td class="p-3"><?= htmlspecialchars($club['club_name']) ?></td>
             <td class="p-3"><?= htmlspecialchars($club['club_description']) ?></td>
-            <td class="p-3"><?= $club['created_at'] ?></td>
+            
 
             <td class="p-3 space-x-2">
               <a href="edit_club.php?id=<?= $club['id'] ?>" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Edit</a>

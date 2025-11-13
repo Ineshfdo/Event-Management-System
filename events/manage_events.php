@@ -101,7 +101,7 @@ $events = $pdo->query("
     <table class="w-full min-w-[1200px] text-left border-collapse">
       <thead class="bg-gray-50">
         <tr>
-          <th class="p-3 border-b">ID</th>
+      
           <th class="p-3 border-b">Title</th>
           <th class="p-3 border-b">Description</th>
           <th class="p-3 border-b">Event Date</th>
@@ -115,7 +115,7 @@ $events = $pdo->query("
         <?php foreach($events as $event): ?>
         <tr class="border-b hover:bg-gray-50">
 
-          <td class="p-3"><?= $event['id'] ?></td>
+         
 
           <td class="p-3"><?= htmlspecialchars($event['title']) ?></td>
 

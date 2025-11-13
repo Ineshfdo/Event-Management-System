@@ -61,13 +61,13 @@ $events = $pdo->query("
         <table class="w-full min-w-[1300px] border-collapse text-left">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="p-3 border-b">ID</th>
+                   
                     <th class="p-3 border-b">Title</th>
                     <th class="p-3 border-b">Description</th>
                     <th class="p-3 border-b">Main Image</th>
                    
                     <th class="p-3 border-b">Club</th>
-                    <th class="p-3 border-b">Created At</th>
+                 
                     <th class="p-3 border-b">Actions</th>
                 </tr>
             </thead>
@@ -75,7 +75,7 @@ $events = $pdo->query("
             <tbody>
                 <?php foreach ($events as $event): ?>
                 <tr class="border-b hover:bg-gray-50">
-                    <td class="p-3"><?= $event['id'] ?></td>
+                   
                     <td class="p-3"><?= htmlspecialchars($event['event_title']) ?></td>
                     <td class="p-3"><?= htmlspecialchars($event['event_description']) ?></td>
                     <td class="p-3">
@@ -85,7 +85,7 @@ $events = $pdo->query("
                     </td>
                      
                     <td class="p-3"><?= htmlspecialchars($event['club_name'] ?? 'N/A') ?></td>
-                    <td class="p-3"><?= $event['created_at'] ?></td>
+                   
                     <td class="p-3 space-x-3">
                         <a href="events_past_edit.php?id=<?= $event['id'] ?>" class="text-blue-600 hover:underline">Edit</a>
                         <a href="?delete_past=<?= $event['id'] ?>" 
