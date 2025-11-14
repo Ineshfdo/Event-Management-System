@@ -23,17 +23,46 @@ if (!$club) {
     exit;
 }
 
-// Fetch upcoming events
-$eventQuery = "SELECT * FROM events WHERE club_id = ?";
+/* ----------------------------------------
+   FETCH UPCOMING EVENTS (from events table)
+---------------------------------------- */
+$eventQuery = "
+    SELECT * FROM events 
+    WHERE club_id = ? AND event_date >= CURDATE()
+    ORDER BY event_date ASC
+";
 $eventStmt = $pdo->prepare($eventQuery);
 $eventStmt->execute([$club_id]);
 $events = $eventStmt->fetchAll();
 
-// Fetch PAST EVENTS with extra images
-$pastQuery = "SELECT * FROM past_events WHERE club_id = ? ORDER BY created_at DESC";
-$pastStmt = $pdo->prepare($pastQuery);
-$pastStmt->execute([$club_id]);
-$past_events = $pastStmt->fetchAll();
+/* ----------------------------------------
+   FETCH AUTO PAST EVENTS (from events table)
+---------------------------------------- */
+$autoPastQuery = "
+    SELECT *, 'auto' AS source_type FROM events 
+    WHERE club_id = ? AND event_date < CURDATE()
+    ORDER BY event_date DESC
+";
+$autoPastStmt = $pdo->prepare($autoPastQuery);
+$autoPastStmt->execute([$club_id]);
+$auto_past_events = $autoPastStmt->fetchAll();
+
+/* ----------------------------------------
+   FETCH MANUAL PAST EVENTS (from past_events table)
+---------------------------------------- */
+$manualPastQuery = "
+    SELECT *, 'manual' AS source_type FROM past_events 
+    WHERE club_id = ?
+    ORDER BY created_at DESC
+";
+$manualPastStmt = $pdo->prepare($manualPastQuery);
+$manualPastStmt->execute([$club_id]);
+$manual_past_events = $manualPastStmt->fetchAll();
+
+/* ----------------------------------------
+   MERGE BOTH PAST EVENT SOURCES
+---------------------------------------- */
+$past_events = array_merge($auto_past_events, $manual_past_events);
 ?>
 
 <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg mt-10">
@@ -63,9 +92,8 @@ $past_events = $pastStmt->fetchAll();
         <?= nl2br(htmlspecialchars($club['club_description'])) ?>
     </p>
 
-    
 
-    <!-- Upcoming Events -->
+    <!-- UPCOMING EVENTS -->
     <div class="mb-10">
         <h2 class="text-xl font-semibold text-blue-600 mb-3">Upcoming Events</h2>
 
@@ -74,7 +102,8 @@ $past_events = $pastStmt->fetchAll();
                 <p class="mb-1">
                     <a href="../events/event_view.php?id=<?= $event['id'] ?>" 
                        class="text-blue-700 hover:underline">
-                        - <?= htmlspecialchars($event['title']) ?>
+                        - <?= htmlspecialchars($event['title']) ?> 
+                        
                     </a>
                 </p>
             <?php endforeach; ?>
@@ -83,7 +112,8 @@ $past_events = $pastStmt->fetchAll();
         <?php endif; ?>
     </div>
 
-    <!-- PAST EVENTS -->
+
+    <!-- PAST EVENTS (AUTO + MANUAL) -->
     <div>
         <h2 class="text-xl font-semibold text-red-600 mb-4">Past Events</h2>
 
@@ -103,33 +133,41 @@ $past_events = $pastStmt->fetchAll();
                             <?php if (!empty($p['extra_image_1'])): ?>
                                 <img src="../uploads/<?= $p['extra_image_1'] ?>" class="h-20 w-full object-cover rounded">
                             <?php endif; ?>
-                            
                             <?php if (!empty($p['extra_image_2'])): ?>
                                 <img src="../uploads/<?= $p['extra_image_2'] ?>" class="h-20 w-full object-cover rounded">
                             <?php endif; ?>
-
                             <?php if (!empty($p['extra_image_3'])): ?>
                                 <img src="../uploads/<?= $p['extra_image_3'] ?>" class="h-20 w-full object-cover rounded">
                             <?php endif; ?>
                         </div>
 
                         <!-- Event Title -->
-                        <h3 class="text-lg font-bold mb-2"><?= htmlspecialchars($p['event_title']) ?></h3>
+                        <h3 class="text-lg font-bold mb-2">
+                            <?= htmlspecialchars($p['title'] ?? $p['event_title']) ?>
+                        </h3>
 
-                        <!-- Event Description (15 words limit) -->
+                        <!-- Short Description -->
                         <?php
-                            $words = explode(" ", $p['event_description']);
+                            $desc = $p['description'] ?? $p['event_description'];
+                            $words = explode(" ", $desc);
                             $short = implode(" ", array_slice($words, 0, 15));
                             $isLong = count($words) > 15;
                         ?>
 
                         <p class="text-gray-700 text-sm mb-3">
                             <span class="short-desc"><?= htmlspecialchars($short) ?><?= $isLong ? '...' : '' ?></span>
+
                             <?php if ($isLong): ?>
-                                <span class="full-desc hidden"><?= nl2br(htmlspecialchars($p['event_description'])) ?></span>
+                                <span class="full-desc hidden"><?= nl2br(htmlspecialchars($desc)) ?></span>
                                 <button class="toggleDesc text-blue-600 text-sm underline">Show More</button>
                             <?php endif; ?>
                         </p>
+
+                        <?php if ($p['source_type'] == "auto"): ?>
+                            <p class="text-xs text-gray-500">Event Date: <?= htmlspecialchars($p['event_date']) ?></p>
+                        <?php else: ?>
+                            <p class="text-xs text-gray-500">Added On: <?= htmlspecialchars($p['created_at']) ?></p>
+                        <?php endif; ?>
 
                     </div>
                 <?php endforeach; ?>
@@ -139,23 +177,23 @@ $past_events = $pastStmt->fetchAll();
         <?php else: ?>
             <p class="text-gray-600">No past events found.</p>
         <?php endif; ?>
-<br>
+
         <!-- Club Contact Info -->
-    <div class="bg-gray-100 p-4 rounded-lg mb-8">
-        <p class="text-gray-800 font-semibold mb-2">Contact Information:</p>
+        <div class="bg-gray-100 p-4 rounded-lg mt-8">
+            <p class="text-gray-800 font-semibold mb-2">Contact Information:</p>
 
-        <?php if (!empty($club['contact_description_1'])): ?>
-            <p class="text-gray-700 mb-1"><?= nl2br(htmlspecialchars($club['contact_description_1'])) ?></p>
-        <?php endif; ?>
+            <?php if (!empty($club['contact_description_1'])): ?>
+                <p class="text-gray-700 mb-1"><?= nl2br(htmlspecialchars($club['contact_description_1'])) ?></p>
+            <?php endif; ?>
 
-        <?php if (!empty($club['contact_number_1'])): ?>
-            <p class="text-gray-700">Contact 1: <?= htmlspecialchars($club['contact_number_1']) ?></p>
-        <?php endif; ?>
+            <?php if (!empty($club['contact_number_1'])): ?>
+                <p class="text-gray-700">Contact 1: <?= htmlspecialchars($club['contact_number_1']) ?></p>
+            <?php endif; ?>
 
-        <?php if (!empty($club['contact_number_2'])): ?>
-            <p class="text-gray-700">Contact 2: <?= htmlspecialchars($club['contact_number_2']) ?></p>
-        <?php endif; ?>
-    </div>
+            <?php if (!empty($club['contact_number_2'])): ?>
+                <p class="text-gray-700">Contact 2: <?= htmlspecialchars($club['contact_number_2']) ?></p>
+            <?php endif; ?>
+        </div>
     </div>
 
 </div>
@@ -166,7 +204,6 @@ document.querySelectorAll(".toggleDesc").forEach(btn => {
         const parent = btn.parentElement;
         parent.querySelector(".short-desc").classList.toggle("hidden");
         parent.querySelector(".full-desc").classList.toggle("hidden");
-
         btn.textContent = btn.textContent === "Show More" ? "Show Less" : "Show More";
     });
 });
