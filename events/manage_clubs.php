@@ -91,10 +91,10 @@ $clubs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
 
             <td class="p-3 space-x-2">
-              <a href="edit_club.php?id=<?= $club['id'] ?>" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Edit</a>
+              <a href="edit_club.php?id=<?= $club['id'] ?>" class="text-blue-600 hover:underline">Edit</a>
               <a href="?delete_id=<?= $club['id'] ?>" 
                  onclick="return confirm('Are you sure you want to delete this club?');"
-                 class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Delete</a>
+                 class="text-red-600 hover:underline">Delete</a>
             </td>
           </tr>
         <?php endforeach; ?>

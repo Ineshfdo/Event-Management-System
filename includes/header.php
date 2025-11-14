@@ -12,77 +12,83 @@ if (session_status() === PHP_SESSION_NONE) {
   <title><?php echo $title ?? "EventHorizan"; ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50">
 
-<!-- Header -->
+<body class="bg-gray-50 text-gray-900">
+
+<!-- ======================================
+            HEADER NAVBAR
+====================================== -->
 <header class="fixed top-0 left-0 w-full z-50
-    bg-white/30 backdrop-blur-xl
-    border-b border-white/20
-    supports-[backdrop-filter]:bg-white/40">
+               bg-white/30 backdrop-blur-2xl
+               border-b border-white/20 shadow-sm">
 
   <div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
-<!-- Logo -->
-<div class="flex-shrink-0">
-  <a href="../pages/index.php" class="flex items-center gap-3 text-gray-900 font-semibold transition-transform duration-200 hover:scale-105">
-    <img class="h-12 w-auto" src="../Images/apiit.png" alt="APIIT Logo">
-  </a>
-</div>
 
+    <!-- LOGO -->
+    <div class="flex-shrink-0">
+      <a href="../pages/index.php"
+         class="flex items-center gap-3 transition-transform duration-200 hover:scale-105">
+        <img class="h-12 w-auto drop-shadow-sm" src="../Images/apiit.png" alt="APIIT Logo">
+      </a>
+    </div>
 
-    <!-- Desktop Navigation -->
-    <nav class="hidden md:flex gap-6 items-center text-slate-700 font-medium">
+    <!-- DESKTOP NAV -->
+    <nav class="hidden md:flex gap-8 items-center font-medium">
 
-      <a href="../pages/index.php" 
-         class="relative transition text-slate-700 hover:text-blue-600
-                after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0
+      <a href="../pages/index.php"
+         class="nav-link relative text-gray-800 hover:text-blue-600 transition
+                after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0
                 after:bg-blue-600 after:transition-all after:duration-300
                 hover:after:w-full">
         Home
       </a>
 
       <a href="../pages/clubs.php"
-         class="relative transition text-slate-700 hover:text-blue-600
-                after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0
+         class="nav-link relative text-gray-800 hover:text-blue-600 transition
+                after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0
                 after:bg-blue-600 after:transition-all after:duration-300
                 hover:after:w-full">
         Clubs
       </a>
 
       <a href="../pages/reminders.php"
-         class="relative transition text-slate-700 hover:text-blue-600
-                after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0
+         class="nav-link relative text-gray-800 hover:text-blue-600 transition
+                after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0
                 after:bg-blue-600 after:transition-all after:duration-300
                 hover:after:w-full">
         Reminders
       </a>
 
-     
-      <!-- User / Login -->
+      <!-- USER LOGIN / LOGOUT -->
       <?php if(isset($_SESSION['email'])): ?>
         <?php $firstLetter = strtoupper($_SESSION['email'][0]); ?>
 
         <div class="flex items-center gap-3 ml-4">
-          <div class="w-10 h-10 bg-blue-600 text-white font-bold rounded-full flex items-center justify-center">
+          <div class="w-10 h-10 bg-blue-600 text-white font-bold rounded-full 
+                      flex items-center justify-center shadow-md">
             <?= $firstLetter ?>
           </div>
 
           <a href="../pages/logout.php"
-             class="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition">
+             class="px-4 py-2 bg-red-600 text-white rounded-xl shadow-xl
+                    hover:bg-red-700 transition font-semibold">
             Logout
           </a>
         </div>
 
       <?php else: ?>
         <a href="../pages/login.php"
-           class="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+           class="ml-4 px-5 py-2 bg-blue-600 text-white rounded-xl shadow-md
+                  hover:bg-blue-700 transition font-semibold">
           Login
         </a>
       <?php endif; ?>
+
     </nav>
 
-    <!-- Mobile Menu Button -->
-    <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
-      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2"
+    <!-- MOBILE MENU BUTTON -->
+    <button id="mobile-menu-button" class="md:hidden text-gray-800 hover:text-blue-600 transition">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2"
            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
@@ -90,26 +96,34 @@ if (session_status() === PHP_SESSION_NONE) {
 
   </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white/60 backdrop-blur-xl border-b border-white/20">
-    <nav class="px-6 pt-3 pb-4 space-y-2 text-slate-800">
+  <!-- ======================================
+               MOBILE MENU
+  ====================================== -->
+  <div id="mobile-menu"
+       class="hidden md:hidden bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-sm">
+
+    <nav class="px-6 pt-4 pb-6 space-y-4 text-gray-900 font-medium">
 
       <a href="../pages/index.php"
-         class="block font-medium hover:text-blue-600 transition">Home</a>
+         class="block text-lg hover:text-blue-600 transition nav-link">
+        Home
+      </a>
 
       <a href="../pages/clubs.php"
-         class="block font-medium hover:text-blue-600 transition">Clubs</a>
+         class="block text-lg hover:text-blue-600 transition nav-link">
+        Clubs
+      </a>
 
       <a href="../pages/reminders.php"
-         class="block font-medium hover:text-blue-600 transition">Reminders</a>
-
-      
+         class="block text-lg hover:text-blue-600 transition nav-link">
+        Reminders
+      </a>
 
       <?php if(isset($_SESSION['email'])): ?>
         <?php $firstLetter = strtoupper($_SESSION['email'][0]); ?>
 
-        <div class="flex items-center gap-3 mt-3">
-          <div class="w-10 h-10 bg-blue-600 text-white font-bold rounded-full flex items-center justify-center">
+        <div class="flex items-center gap-4 mt-4">
+          <div class="w-11 h-11 bg-blue-600 text-white font-bold rounded-full flex items-center justify-center shadow">
             <?= $firstLetter ?>
           </div>
 
@@ -121,7 +135,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
       <?php else: ?>
         <a href="../pages/login.php"
-           class="block text-center mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+           class="block text-center mt-3 px-5 py-2 bg-blue-600 text-white 
+                  rounded-lg shadow hover:bg-blue-700 transition font-semibold">
           Login
         </a>
       <?php endif; ?>
@@ -131,9 +146,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 </header>
 
-<!-- Push content below header -->
-<div class="pt-20"></div>
+<!-- Push content down -->
+<div class="pt-24"></div>
 
+<!-- ======================================
+            SCRIPT
+====================================== -->
 <script>
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
@@ -145,12 +163,16 @@ if (session_status() === PHP_SESSION_NONE) {
     });
   }
 
+  // Highlight active page
   const currentPath = window.location.pathname.split("/").pop();
   navLinks.forEach(link => {
     const linkPath = link.getAttribute('href').split("/").pop();
-    if (linkPath === currentPath || (currentPath === "" && linkPath === "index.php")) {
-      link.classList.add('text-blue-600');
-      link.classList.remove('text-gray-700');
+
+    if (linkPath === currentPath || 
+        (currentPath === "" && linkPath === "index.php")) {
+
+      link.classList.add('text-blue-600', 'font-semibold');
+      link.classList.remove('text-gray-800');
     }
   });
 </script>

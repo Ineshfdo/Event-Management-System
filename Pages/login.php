@@ -1,3 +1,4 @@
+<script src="https://cdn.tailwindcss.com"></script>
 <?php
 session_start();
 require_once('../includes/db_connection.php'); 
@@ -14,11 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user && password_verify($password, $user['password'])) {
 
-        // Store login session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['email'] = $user['email'];
-
-        // Add login flag → used by index.php to show popup
         $_SESSION['just_logged_in'] = true;
 
         header("Location: index.php");
@@ -29,31 +27,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require_once('../includes/header.php');
+ 
 ?>
+<br>
+<br>
+<br>
+<br>
+<!-- ==========================
+      LOGIN CONTAINER
+========================== -->
+<div class="max-w-md mx-auto mt-28 mb-20 bg-white/90 backdrop-blur-xl p-10 rounded-3xl shadow-xl border border-gray-200">
 
-<br><br><br><br>
-<div class="max-w-md mx-auto mt-20 p-8 bg-white shadow rounded-lg">
-    <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+    <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-6 tracking-tight">
+        Welcome Back
+    </h2>
 
     <?php if ($message): ?>
-        <p class="mb-4 text-red-500"><?= $message ?></p>
+        <p class="mb-4 text-red-600 font-semibold text-center bg-red-100 border border-red-300 rounded-lg py-2">
+            <?= $message ?>
+        </p>
     <?php endif; ?>
 
-    <form method="POST">
-        <label class="block mb-2">Email</label>
-        <input type="email" name="email" class="w-full border p-2 rounded mb-4" required>
+    <form method="POST" class="space-y-6">
 
-        <label class="block mb-2">Password</label>
-        <input type="password" name="password" class="w-full border p-2 rounded mb-4" required>
+        <!-- Email -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2">Email</label>
+            <input 
+                type="email" 
+                name="email"
+                class="w-full px-4 py-2 bg-white/80 border border-gray-300 rounded-xl 
+                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                required>
+        </div>
 
-        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
+        <!-- Password -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2">Password</label>
+            <input 
+                type="password" 
+                name="password"
+                class="w-full px-4 py-2 bg-white/80 border border-gray-300 rounded-xl 
+                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                required>
+        </div>
+
+        <!-- Submit -->
+        <button 
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold 
+                   shadow-md hover:bg-blue-700 active:scale-95 transition">
             Login
         </button>
     </form>
 
-    <p class="mt-4 text-center text-gray-600">
-        Don't have an account? 
-        <a href="signup.php" class="text-blue-600">Sign Up</a>
+    <!-- SIGNUP LINK -->
+    <p class="mt-6 text-center text-gray-600">
+        Don’t have an account? 
+        <a href="signup.php" class="text-blue-600 font-semibold hover:underline">
+            Sign Up
+        </a>
     </p>
+
 </div>
+
+ 

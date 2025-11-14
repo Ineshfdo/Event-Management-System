@@ -148,14 +148,14 @@ function renderTable($title, $columns, $rows, $type = null) {
 
   <!-- Tables -->
   <?php
-    $clubRows = array_map(fn($c) => [$c['id'], htmlspecialchars($c['club_name']), $c['created_at']], $LatestClubs);
-    renderTable('Latest Clubs', ['ID','Club Name','Created At','Actions'], $clubRows, 'club');
+    $clubRows = array_map(fn($c) => [ htmlspecialchars($c['club_name']), $c['created_at']], $LatestClubs);
+    renderTable('Latest Clubs', ['Club Name','Created At','Actions'], $clubRows, 'club');
 
-    $eventRows = array_map(fn($e) => [$e['id'], htmlspecialchars($e['title']), $e['event_date'], $e['created_at']], $LatestEvents);
-    renderTable('Latest Events', ['ID','Event Title','Event Date','Created At','Actions'], $eventRows, 'event');
+    $eventRows = array_map(fn($e) => [htmlspecialchars($e['title']), $e['event_date'], $e['created_at']], $LatestEvents);
+    renderTable('Latest Events', ['Event Title','Event Date','Created At','Actions'], $eventRows, 'event');
 
-    $reminderRows = array_map(fn($r) => [$r['id'], htmlspecialchars($r['user_email']), htmlspecialchars($r['event_title']), $r['created_at']], $LatestReminders);
-    renderTable('Latest Reminders', ['ID','User Email','Event Title','Added At'], $reminderRows);
+    $reminderRows = array_map(fn($r) => [ htmlspecialchars($r['user_email']), htmlspecialchars($r['event_title']), $r['created_at']], $LatestReminders);
+    renderTable('Latest Reminders', ['User Email','Event Title','Added At'], $reminderRows);
   ?>
 </main>
 

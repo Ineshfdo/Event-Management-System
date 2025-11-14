@@ -41,68 +41,104 @@ if (!empty($event['club_id'])) {
 $eventPast = (strtotime($event['event_date']) < time());
 ?>
 
-<div class="max-w-4xl mx-auto bg-white p-8 mt-10 rounded-lg shadow-lg">
-    <img src="../uploads/<?= htmlspecialchars($event['main_image']) ?>" class="w-full h-64 object-cover rounded-lg mb-5">
-    <h1 class="text-3xl font-bold"><?= htmlspecialchars($event['title']) ?></h1>
-<br>
-    <!-- Event Date, Venue, Price & Ticket URL -->
-    <p class="text-gray-600 text-sm mb-1">
-        Event Date & Time: <?= $event['event_date'] ?>
-    </p>
-    <p class="text-gray-600 text-sm mb-1">
-        Venue: <?= htmlspecialchars($event['venue']) ?>
-    </p>
-    <p class="text-gray-600 text-sm mb-1">
-        Price: <?= !empty($event['price']) ? 'LKR ' . number_format($event['price'], 2) : 'Free' ?>
-    </p>
-    <?php if (!empty($event['ticket_url'])): ?>
-        <p class="text-gray-600 text-sm mb-3">
-            Place to Buy Tickets: 
-            <a href="<?= htmlspecialchars($event['ticket_url']) ?>" target="_blank" class="text-blue-600 underline">
-                Buy Tickets
+
+<!-- ========================
+       EVENT VIEW CARD
+======================== -->
+<div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-xl p-10 mt-16 rounded-3xl shadow-xl border border-gray-200">
+
+    <!-- Main Image -->
+    <img src="../uploads/<?= htmlspecialchars($event['main_image']) ?>" 
+         class="w-full h-72 object-cover rounded-2xl shadow-lg mb-6" />
+
+    <!-- Title -->
+    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
+        <?= htmlspecialchars($event['title']) ?>
+    </h1>
+
+    <!-- Event Details -->
+    <div class="space-y-2 text-gray-600 text-sm">
+        <p><span class="font-semibold text-gray-900">Event Date & Time:</span> <?= $event['event_date'] ?></p>
+        <p><span class="font-semibold text-gray-900">Venue:</span> <?= htmlspecialchars($event['venue']) ?></p>
+        <p><span class="font-semibold text-gray-900">Price:</span> 
+            <?= !empty($event['price']) ? 'LKR ' . number_format($event['price'], 2) : 'Free' ?>
+        </p>
+
+        <?php if (!empty($event['ticket_url'])): ?>
+        <p>
+            <span class="font-semibold text-gray-900">Buy Tickets:</span>
+            <a href="<?= htmlspecialchars($event['ticket_url']) ?>" 
+               target="_blank" 
+               class="text-blue-600 underline hover:text-blue-700 transition">
+                Click Here
             </a>
         </p>
-    <?php endif; ?>
-
-    <p class="text-gray-800 text-lg leading-relaxed mb-6"><?= nl2br(htmlspecialchars($event['description'])) ?></p>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <?php if (!empty($event['extra_image_1'])): ?>
-            <img src="../uploads/<?= htmlspecialchars($event['extra_image_1']) ?>" class="rounded-lg h-40 w-full object-cover">
-        <?php endif; ?>
-        <?php if (!empty($event['extra_image_2'])): ?>
-            <img src="../uploads/<?= htmlspecialchars($event['extra_image_2']) ?>" class="rounded-lg h-40 w-full object-cover">
-        <?php endif; ?>
-        <?php if (!empty($event['extra_image_3'])): ?>
-            <img src="../uploads/<?= htmlspecialchars($event['extra_image_3']) ?>" class="rounded-lg h-40 w-full object-cover">
         <?php endif; ?>
     </div>
 
-    <div class="flex gap-4 mt-8">
-        <a href="../Pages/index.php" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+    <!-- Description -->
+    <p class="text-gray-800 text-lg leading-relaxed mt-6 mb-8 whitespace-pre-line">
+        <?= nl2br(htmlspecialchars($event['description'])) ?>
+    </p>
+
+    <!-- Extra Images Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <?php if (!empty($event['extra_image_1'])): ?>
+        <img src="../uploads/<?= htmlspecialchars($event['extra_image_1']) ?>" 
+             class="rounded-xl h-40 w-full object-cover shadow-md hover:scale-[1.02] transition" />
+        <?php endif; ?>
+
+        <?php if (!empty($event['extra_image_2'])): ?>
+        <img src="../uploads/<?= htmlspecialchars($event['extra_image_2']) ?>" 
+             class="rounded-xl h-40 w-full object-cover shadow-md hover:scale-[1.02] transition" />
+        <?php endif; ?>
+
+        <?php if (!empty($event['extra_image_3'])): ?>
+        <img src="../uploads/<?= htmlspecialchars($event['extra_image_3']) ?>" 
+             class="rounded-xl h-40 w-full object-cover shadow-md hover:scale-[1.02] transition" />
+        <?php endif; ?>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-4 mt-10">
+
+        <!-- Go Back -->
+        <a href="../Pages/index.php" 
+           class="px-5 py-2.5 bg-gray-600 text-white rounded-xl shadow hover:bg-gray-700 transition">
            Go Back
         </a>
 
+        <!-- Add Reminder -->
         <?php if ($eventPast): ?>
-            <span class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed">
+            <span class="px-5 py-2.5 bg-gray-400 text-white rounded-xl shadow cursor-not-allowed">
                 Add Reminder (Event Passed)
             </span>
+
         <?php elseif (isset($_SESSION['user_id'])): ?>
-            <a href="../Pages/addReminder.php?event_id=<?= $event_id ?>" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            <a href="../Pages/addReminder.php?event_id=<?= $event_id ?>" 
+               class="px-5 py-2.5 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition">
                Add Reminder
             </a>
+
         <?php else: ?>
-            <a href="../Pages/login.php" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            <a href="../Pages/login.php"
+               class="px-5 py-2.5 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition">
                Add Reminder
             </a>
         <?php endif; ?>
 
+        <!-- View Club -->
         <?php if ($club): ?>
-            <a href="../clubs/club_view.php?id=<?= $club['id'] ?>" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-               View Club
-            </a>
+        <a href="../clubs/club_view.php?id=<?= $club['id'] ?>" 
+           class="px-5 py-2.5 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition">
+           View Club
+        </a>
         <?php endif; ?>
+
     </div>
+
 </div>
+
 <br><br><br>
+
 <?php include('../includes/footer.php'); ?>

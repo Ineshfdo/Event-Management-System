@@ -60,17 +60,17 @@ $clubStmt->execute();
 $clubs = $clubStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- ===========================
-     REMINDER POPUP (SHOW AFTER LOGIN)
-=========================== -->
+<!-- =========================
+     REMINDER POPUP
+========================= -->
 <?php if ($showPopup): ?>
-<div id="reminderPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl shadow-xl max-w-md w-full">
-        <h2 class="text-xl font-bold mb-4">Upcoming Reminders</h2>
+<div id="reminderPopup" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-gray-200 max-w-md w-full animate-[fadeIn_0.3s_ease]">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900">🔔 Upcoming Reminders</h2>
 
-        <ul class="list-disc ml-5 text-gray-700 mb-4">
+        <ul class="space-y-3 text-gray-700 mb-4">
             <?php foreach ($reminderList as $r): ?>
-                <li class="mb-1">
+                <li class="p-3 bg-gray-100 rounded-lg shadow-sm">
                     <strong><?= htmlspecialchars($r['title']) ?></strong><br>
                     <span class="text-sm text-gray-500">Date: <?= $r['event_date'] ?></span>
                 </li>
@@ -78,34 +78,48 @@ $clubs = $clubStmt->fetchAll(PDO::FETCH_ASSOC);
         </ul>
 
         <button onclick="document.getElementById('reminderPopup').remove();"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition font-semibold">
             OK
         </button>
     </div>
 </div>
 <?php endif; ?>
 
-<!-- ===========================
-     Your calendar + clubs section (unchanged)
-=========================== -->
-
 <script>
 const events = <?php echo json_encode($events); ?>;
 </script>
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-    <div class="flex justify-between items-center mb-4">
-        <button id="prevMonth" class="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">&lt;</button>
-        <h2 id="monthYear" class="text-lg font-semibold"></h2>
-        <button id="nextMonth" class="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">&gt;</button>
+<!-- =========================
+     TITLE
+========================= -->
+<h1 class="text-center text-5xl md:text-5xl font-extrabold tracking-tight mt-2 text-gray-900 drop-shadow-sm">
+  Event Horizon
+</h1>
+
+<!-- =========================
+     CALENDAR
+========================= -->
+<div class="max-w-4xl mx-auto mt-12 bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-xl border border-gray-200">
+    <div class="flex justify-between items-center mb-6">
+        <button id="prevMonth"
+            class="p-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 active:scale-95 transition">
+            &lt;
+        </button>
+
+        <h2 id="monthYear" class="text-2xl font-bold text-gray-900"></h2>
+
+        <button id="nextMonth"
+            class="p-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 active:scale-95 transition">
+            &gt;
+        </button>
     </div>
 
-    <div class="grid grid-cols-7 mb-2 text-center font-bold text-sm text-gray-700">
+    <div class="grid grid-cols-7 mb-4 text-center font-semibold text-gray-700 tracking-wide">
         <div>Sun</div> <div>Mon</div> <div>Tue</div>
         <div>Wed</div> <div>Thu</div> <div>Fri</div> <div>Sat</div>
     </div>
 
-    <div id="calendarDays" class="grid grid-cols-7 text-center text-sm gap-2"></div>
+    <div id="calendarDays" class="grid grid-cols-7 gap-3 text-center text-sm"></div>
 </div>
 
 <script>
@@ -136,12 +150,15 @@ function renderCalendar() {
 
         const todaysEvents = events.filter(e => e.event_date.startsWith(dateStr));
 
-        let dayClass = `p-2 rounded-lg transition duration-200 ${isToday ? "bg-red-100 border-2 border-red-400 shadow-md" : "hover:bg-blue-50 cursor-pointer"}`;
+        let dayClass = `p-3 rounded-xl transition duration-200 shadow-sm 
+                        ${isToday 
+                            ? "bg-yellow-100 border-2 border-yellow-400 shadow-lg text-yellow-900" 
+                            : "hover:bg-blue-100/60 cursor-pointer bg-white/70 backdrop-blur-sm border"}`;
 
         if (todaysEvents.length > 0) {
             let eventHTML = todaysEvents.map(e => {
                 const time = new Date(e.event_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                return `<p class="text-xs bg-gray-100 p-1 rounded mb-1 hover:bg-blue-200 cursor-pointer" 
+                return `<p class="text-xs bg-blue-50 border border-blue-200 p-2 rounded-lg mb-1 shadow hover:bg-blue-100 cursor-pointer transition"
                           onclick="window.location.href='../events/event_view.php?id=${e.id}'">
                           ${e.title} <span class="text-gray-500">(${time})</span>
                         </p>`;
@@ -149,11 +166,14 @@ function renderCalendar() {
             
             calendarDays.innerHTML += `
                 <div class="${dayClass}">
-                    <div class="font-semibold mb-1 ${isToday ? 'text-yellow-700' : ''}">${day}</div>
+                    <div class="font-semibold mb-2 ${isToday ? 'text-yellow-700' : ''}">${day}</div>
                     ${eventHTML}
                 </div>`;
         } else {
-            calendarDays.innerHTML += `<div class="${dayClass}"><div class="font-semibold ${isToday ? 'text-yellow-700' : ''}">${day}</div></div>`;
+            calendarDays.innerHTML += `
+                <div class="${dayClass}">
+                    <div class="font-semibold ${isToday ? 'text-yellow-700' : ''}">${day}</div>
+                </div>`;
         }
     }
 }
@@ -170,11 +190,15 @@ document.getElementById("nextMonth").onclick = () => {
 renderCalendar();
 </script>
 
-<!-- CLUBS SECTION -->
-<div class="max-w-5xl mx-auto mt-16">
-    <h2 class="text-2xl font-bold mb-4 text-center">Top Clubs</h2>
+<!-- =========================
+     TOP CLUBS (Redesigned)
+========================= -->
+<div class="max-w-6xl mx-auto mt-24">
+    <h2 class="text-4xl font-extrabold mb-12 text-center text-gray-900 tracking-tight drop-shadow-sm">
+        Latest Clubs
+    </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
         <?php foreach ($clubs as $club): ?>
         <?php 
             $shortDesc = !empty($club['short_description']) 
@@ -183,23 +207,36 @@ renderCalendar();
         ?>
 
         <div onclick="window.location.href='../clubs/club_view.php?id=<?= $club['id'] ?>'"
-             class="bg-white p-4 shadow-md rounded-lg hover:shadow-xl transition cursor-pointer">
-             
-            <img src="../uploads/<?= htmlspecialchars($club['club_main_image']) ?>"
-                 class="h-48 w-full object-cover rounded-lg mb-3">
+            class="relative bg-white/80 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-gray-200 
+                   transition-all duration-300 cursor-pointer 
+                   hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
 
-            <h3 class="text-lg font-bold text-gray-900">
-                <?= htmlspecialchars($club['club_name']) ?>
-            </h3>
+            <!-- Soft glow background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-100/40 to-indigo-100/40 opacity-60"></div>
 
-            <p class="text-gray-600 text-sm">
-                <?= htmlspecialchars($shortDesc) ?>
-            </p>
+            <!-- Inner content -->
+            <div class="relative z-10">
+                <img src="../uploads/<?= htmlspecialchars($club['club_main_image']) ?>"
+                    class="h-56 w-full object-cover rounded-2xl shadow-md mb-5 transition-all duration-300 hover:scale-[1.02]">
+
+                <h3 class="text-2xl font-bold text-gray-900 mb-2 tracking-tight">
+                    <?= htmlspecialchars($club['club_name']) ?>
+                </h3>
+
+                <p class="text-gray-700 text-sm leading-relaxed mt-1">
+                    <?= htmlspecialchars($shortDesc) ?>
+                </p>
+            </div>
+
+            <!-- Glow ring on hover -->
+            <div class="absolute -inset-px rounded-3xl bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 
+                        group-hover:opacity-20 blur-xl transition duration-500 pointer-events-none"></div>
 
         </div>
         <?php endforeach; ?>
     </div>
 </div>
+
 
 <br><br><br>
 <?php include('../includes/footer.php'); ?>

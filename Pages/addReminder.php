@@ -23,7 +23,6 @@ $check = $pdo->prepare("SELECT * FROM reminders WHERE user_id = ? AND event_id =
 $check->execute([$user_id, $event_id]);
 
 if ($check->rowCount() == 0) {
-    // Insert reminder
     $stmt = $pdo->prepare("INSERT INTO reminders (user_id, event_id) VALUES (?, ?)");
     $stmt->execute([$user_id, $event_id]);
 }
@@ -47,39 +46,83 @@ if (!empty($event['club_id'])) {
 }
 ?>
 
-<div class="max-w-4xl mx-auto bg-white p-8 mt-10 rounded-lg shadow-lg">
-    <h2 class="text-xl font-bold mb-4 text-green-600">Reminder Added Successfully!</h2>
+<!-- =============================
+       MAIN SUCCESS CARD
+============================= -->
+<div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-xl p-10 mt-6 rounded-3xl shadow-xl border border-gray-200">
 
-    <img src="../uploads/<?= $event['main_image'] ?>" class="w-full h-64 object-cover rounded-lg mb-5">
-    <h1 class="text-3xl font-bold mb-2"><?= $event['title'] ?></h1>
-    <p class="text-gray-600 text-sm mb-3">📅 Event Date: <?= $event['event_date'] ?></p>
-    <p class="text-gray-800 text-lg mb-4"><?= nl2br($event['description']) ?></p>
+    <div class="bg-green-100 border border-green-300 text-green-800 p-4 rounded-xl mb-6 shadow-sm">
+        <h2 class="text-2xl font-bold flex items-center gap-2">
+            ✅ Reminder Added Successfully!
+        </h2>
+        <p class="text-sm mt-1">You will be notified when the event date is near.</p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <!-- EVENT MAIN IMAGE -->
+    <img src="../uploads/<?= $event['main_image'] ?>"
+         class="w-full h-72 object-cover rounded-2xl shadow-lg mb-6" />
+
+    <!-- EVENT TITLE -->
+    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-3">
+        <?= $event['title'] ?>
+    </h1>
+
+    <!-- EVENT DATE -->
+    <p class="text-gray-600 text-sm mb-2">
+        📅 <span class="font-semibold text-gray-900">Event Date:</span> <?= $event['event_date'] ?>
+    </p>
+
+    <!-- DESCRIPTION -->
+    <p class="text-gray-800 text-lg leading-relaxed mb-8 whitespace-pre-line">
+        <?= nl2br($event['description']) ?>
+    </p>
+
+    <!-- EXTRA IMAGES -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <?php if (!empty($event['extra_image_1'])): ?>
-            <img src="../uploads/<?= $event['extra_image_1'] ?>" class="rounded-lg h-40 w-full object-cover">
+            <img src="../uploads/<?= $event['extra_image_1'] ?>" 
+                 class="rounded-xl h-40 w-full object-cover shadow-md hover:scale-[1.02] transition">
         <?php endif; ?>
+
         <?php if (!empty($event['extra_image_2'])): ?>
-            <img src="../uploads/<?= $event['extra_image_2'] ?>" class="rounded-lg h-40 w-full object-cover">
+            <img src="../uploads/<?= $event['extra_image_2'] ?>" 
+                 class="rounded-xl h-40 w-full object-cover shadow-md hover:scale-[1.02] transition">
         <?php endif; ?>
+
         <?php if (!empty($event['extra_image_3'])): ?>
-            <img src="../uploads/<?= $event['extra_image_3'] ?>" class="rounded-lg h-40 w-full object-cover">
+            <img src="../uploads/<?= $event['extra_image_3'] ?>" 
+                 class="rounded-xl h-40 w-full object-cover shadow-md hover:scale-[1.02] transition">
         <?php endif; ?>
     </div>
 
+    <!-- LINKED CLUB -->
     <?php if ($club): ?>
-        <p class="text-blue-600 font-semibold mb-4">
+        <p class="text-blue-600 font-semibold mb-6 text-lg">
             🔗 Linked Club: 
-            <a href="../clubs/club_view.php?id=<?= $club['id'] ?>"><?= $club['club_name'] ?></a>
+            <a href="../clubs/club_view.php?id=<?= $club['id'] ?>" 
+               class="underline hover:text-blue-800 transition">
+                <?= $club['club_name'] ?>
+            </a>
         </p>
     <?php endif; ?>
 
-    <a href="reminders.php" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
-        View My Reminders
-    </a>
-    <a href="../Pages/index.php" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition ml-2">
-        Back to Calendar
-    </a>
+    <!-- BUTTONS -->
+    <div class="flex gap-4 mt-4">
+
+        <a href="reminders.php" 
+           class="px-5 py-2.5 bg-green-600 text-white rounded-xl shadow-md 
+                  hover:bg-green-700 transition font-semibold">
+            View My Reminders
+        </a>
+
+        <a href="../Pages/index.php" 
+           class="px-5 py-2.5 bg-gray-600 text-white rounded-xl shadow-md 
+                  hover:bg-gray-700 transition font-semibold">
+            Back to Calendar
+        </a>
+
+    </div>
+
 </div>
 
 <?php include('../includes/footer.php'); ?>
