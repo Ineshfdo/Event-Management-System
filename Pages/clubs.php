@@ -85,7 +85,7 @@ $clubs = $stmt->fetchAll();
         <div class="relative bg-white/90 backdrop-blur-lg p-5 border border-gray-200 shadow-lg rounded-2xl 
                     hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
 
-            <a href="../clubs/club_view.php?id=<?= $club['id'] ?>">
+            <a href="club_view.php?id=<?= $club['id'] ?>">
 
                 <!-- Club Image -->
                 <img src="../uploads/<?= $club['club_main_image'] ?>"

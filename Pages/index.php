@@ -159,7 +159,7 @@ function renderCalendar() {
             let eventHTML = todaysEvents.map(e => {
                 const time = new Date(e.event_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 return `<p class="text-xs bg-blue-50 border border-blue-200 p-2 rounded-lg mb-1 shadow hover:bg-blue-100 cursor-pointer transition"
-                          onclick="window.location.href='../events/event_view.php?id=${e.id}'">
+                          onclick="window.location.href='event_view.php?id=${e.id}'">
                           ${e.title} <span class="text-gray-500">(${time})</span>
                         </p>`;
             }).join('');
@@ -206,7 +206,7 @@ renderCalendar();
                          : $club['club_description'];
         ?>
 
-        <div onclick="window.location.href='../clubs/club_view.php?id=<?= $club['id'] ?>'"
+        <div onclick="window.location.href='club_view.php?id=<?= $club['id'] ?>'"
             class="relative bg-white/80 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-gray-200 
                    transition-all duration-300 cursor-pointer 
                    hover:shadow-2xl hover:-translate-y-2 overflow-hidden">

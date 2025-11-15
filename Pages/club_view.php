@@ -106,7 +106,7 @@ $past_events = array_merge($auto_past_events, $manual_past_events);
         <?php if ($events): ?>
             <div class="space-y-2">
             <?php foreach ($events as $event): ?>
-                <a href="../events/event_view.php?id=<?= $event['id'] ?>"
+                <a href="event_view.php?id=<?= $event['id'] ?>"
                    class="block bg-blue-50 border border-blue-200 p-3 rounded-xl shadow-sm 
                           hover:bg-blue-100 transition text-blue-700 font-medium">
                     <?= htmlspecialchars($event['title']) ?>

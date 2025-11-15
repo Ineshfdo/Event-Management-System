@@ -103,7 +103,7 @@ $eventPast = (strtotime($event['event_date']) < time());
     <div class="flex flex-wrap gap-4 mt-10">
 
         <!-- Go Back -->
-        <a href="../Pages/index.php" 
+        <a href="index.php" 
            class="px-5 py-2.5 bg-gray-600 text-white rounded-xl shadow hover:bg-gray-700 transition">
            Go Back
         </a>
@@ -115,13 +115,13 @@ $eventPast = (strtotime($event['event_date']) < time());
             </span>
 
         <?php elseif (isset($_SESSION['user_id'])): ?>
-            <a href="../Pages/addReminder.php?event_id=<?= $event_id ?>" 
+            <a href="addReminder.php?event_id=<?= $event_id ?>" 
                class="px-5 py-2.5 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition">
                Add Reminder
             </a>
 
         <?php else: ?>
-            <a href="../Pages/login.php"
+            <a href="login.php"
                class="px-5 py-2.5 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition">
                Add Reminder
             </a>
@@ -129,7 +129,7 @@ $eventPast = (strtotime($event['event_date']) < time());
 
         <!-- View Club -->
         <?php if ($club): ?>
-        <a href="../clubs/club_view.php?id=<?= $club['id'] ?>" 
+        <a href="club_view.php?id=<?= $club['id'] ?>" 
            class="px-5 py-2.5 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition">
            View Club
         </a>

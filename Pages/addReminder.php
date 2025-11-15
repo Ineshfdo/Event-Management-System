@@ -99,7 +99,7 @@ if (!empty($event['club_id'])) {
     <?php if ($club): ?>
         <p class="text-blue-600 font-semibold mb-6 text-lg">
             🔗 Linked Club: 
-            <a href="../clubs/club_view.php?id=<?= $club['id'] ?>" 
+            <a href="club_view.php?id=<?= $club['id'] ?>" 
                class="underline hover:text-blue-800 transition">
                 <?= $club['club_name'] ?>
             </a>
@@ -115,7 +115,7 @@ if (!empty($event['club_id'])) {
             View My Reminders
         </a>
 
-        <a href="../Pages/index.php" 
+        <a href="index.php" 
            class="px-5 py-2.5 bg-gray-600 text-white rounded-xl shadow-md 
                   hover:bg-gray-700 transition font-semibold">
             Back to Calendar

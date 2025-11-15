@@ -89,7 +89,7 @@ $reminders = $stmt->fetchAll();
                     rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1 
                     transition-all cursor-pointer">
 
-            <a href="../events/event_view.php?id=<?= $event['id'] ?>">
+            <a href="event_view.php?id=<?= $event['id'] ?>">
 
                 <img src="../uploads/<?= $event['main_image'] ?>"
                      class="h-48 w-full object-cover rounded-xl shadow mb-4">
