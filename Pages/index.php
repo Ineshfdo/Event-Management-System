@@ -61,12 +61,13 @@ $clubs = $clubStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- =========================
-     REMINDER POPUP
+     REMINDER POPUP (TOP RIGHT)
 ========================= -->
 <?php if ($showPopup): ?>
-<div id="reminderPopup" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-    <div class="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-gray-200 max-w-md w-full animate-[fadeIn_0.3s_ease]">
-        <h2 class="text-2xl font-bold mb-4 text-gray-900">🔔 Upcoming Reminders</h2>
+<div id="reminderPopup" class="fixed top-5 left-4 z-50">
+
+    <div class="bg-white p-5 rounded-2xl shadow-xl border border-gray-200 w-80 animate-[fadeIn_0.3s_ease]">
+        <h2 class="text-xl font-bold mb-4 text-gray-900">🔔 Upcoming Reminders</h2>
 
         <ul class="space-y-3 text-gray-700 mb-4">
             <?php foreach ($reminderList as $r): ?>
@@ -82,6 +83,7 @@ $clubs = $clubStmt->fetchAll(PDO::FETCH_ASSOC);
             OK
         </button>
     </div>
+
 </div>
 <?php endif; ?>
 
@@ -191,7 +193,7 @@ renderCalendar();
 </script>
 
 <!-- =========================
-     TOP CLUBS (Redesigned)
+     TOP CLUBS
 ========================= -->
 <div class="max-w-6xl mx-auto mt-24">
     <h2 class="text-4xl font-extrabold mb-12 text-center text-gray-900 tracking-tight drop-shadow-sm">
@@ -211,10 +213,8 @@ renderCalendar();
                    transition-all duration-300 cursor-pointer 
                    hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
 
-            <!-- Soft glow background -->
             <div class="absolute inset-0 bg-gradient-to-br from-blue-100/40 to-indigo-100/40 opacity-60"></div>
 
-            <!-- Inner content -->
             <div class="relative z-10">
                 <img src="../uploads/<?= htmlspecialchars($club['club_main_image']) ?>"
                     class="h-56 w-full object-cover rounded-2xl shadow-md mb-5 transition-all duration-300 hover:scale-[1.02]">
@@ -227,16 +227,10 @@ renderCalendar();
                     <?= htmlspecialchars($shortDesc) ?>
                 </p>
             </div>
-
-            <!-- Glow ring on hover -->
-            <div class="absolute -inset-px rounded-3xl bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 
-                        group-hover:opacity-20 blur-xl transition duration-500 pointer-events-none"></div>
-
         </div>
         <?php endforeach; ?>
     </div>
 </div>
-
 
 <br><br><br>
 <?php include('../includes/footer.php'); ?>
